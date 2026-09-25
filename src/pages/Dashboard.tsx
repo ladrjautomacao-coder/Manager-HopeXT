@@ -51,11 +51,11 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {kpis.map((k) => (
-          <Card key={k.label}>
+          <Card key={k.label} className="border-l-4 border-l-accent">
             <CardContent className="flex items-center justify-between p-6">
               <div>
                 <p className="text-sm text-muted-foreground">{k.label}</p>
-                <p className="text-3xl font-bold">{loading ? "—" : k.value}</p>
+                <p className="text-3xl font-bold tabular-nums">{loading ? "—" : k.value}</p>
               </div>
               <k.icon className="h-8 w-8 text-muted-foreground/40" />
             </CardContent>
