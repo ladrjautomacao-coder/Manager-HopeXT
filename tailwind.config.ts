@@ -26,6 +26,13 @@ export default {
         card: { DEFAULT: "hsl(var(--card))", foreground: "hsl(var(--card-foreground))" },
         success: { DEFAULT: "hsl(var(--success))", foreground: "hsl(var(--success-foreground))" },
         warning: { DEFAULT: "hsl(var(--warning))", foreground: "hsl(var(--warning-foreground))" },
+        /* Mesma paleta da landing pública (fora do sistema de design do
+           resto do Portal, de propósito) — usada só na tela de login. */
+        hopeDark: "#070710",
+        hopeCard: "rgba(18, 18, 34, 0.78)",
+      },
+      fontFamily: {
+        brand: ["Outfit", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
