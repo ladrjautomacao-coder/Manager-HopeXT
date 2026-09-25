@@ -9,6 +9,8 @@ const NAV_ITEMS = [
   { title: "Clientes", url: "/clientes", icon: Building2 },
 ];
 
+const HOPEXT_LOGO_URL = "https://emzqlctomlsjwmgthbkv.supabase.co/storage/v1/object/public/tenant-logos/hopext-default.png";
+
 export function Layout() {
   const { signOut, user } = useAuth();
 
@@ -17,7 +19,10 @@ export function Layout() {
       <header className="border-b bg-card">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
-            <span className="text-lg font-bold tracking-tight">Portal HopeXT</span>
+            <div className="flex items-center gap-2">
+              <img src={HOPEXT_LOGO_URL} alt="HopeXT" className="h-7 w-7 rounded-full object-cover" />
+              <span className="text-lg font-bold tracking-tight">Portal HopeXT</span>
+            </div>
             <nav className="flex items-center gap-1">
               {NAV_ITEMS.map((item) => (
                 <NavLink

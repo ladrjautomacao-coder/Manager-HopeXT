@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Building2 } from "lucide-react";
 import { toast } from "sonner";
+
+const HOPEXT_LOGO_URL = "https://emzqlctomlsjwmgthbkv.supabase.co/storage/v1/object/public/tenant-logos/hopext-default.png";
 
 export default function Login() {
   const { user, isSuperAdmin, loading } = useAuth();
@@ -31,9 +32,7 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="items-center text-center">
-          <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
-            <Building2 className="h-6 w-6" />
-          </div>
+          <img src={HOPEXT_LOGO_URL} alt="HopeXT" className="mb-2 h-14 w-14 rounded-full object-cover" />
           <CardTitle>Portal HopeXT</CardTitle>
           <CardDescription>Console interno de gestão de clientes</CardDescription>
         </CardHeader>
