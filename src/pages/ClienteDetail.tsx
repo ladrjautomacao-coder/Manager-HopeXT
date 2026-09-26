@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { STATUS_LABELS, STATUS_BADGE_VARIANT, type TenantStatus } from "@/lib/tenantStatus";
@@ -42,6 +43,9 @@ export default function ClienteDetail() {
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [confirmText, setConfirmText] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   const load = async () => {
     if (!id) return;
@@ -81,6 +85,19 @@ export default function ClienteDetail() {
     if (error) toast.error("Erro ao salvar marca", { description: error.message });
     else toast.success("Marca atualizada");
     setSaving(false);
+  };
+
+  const handleDelete = async () => {
+    if (!id || !tenant) return;
+    setDeleting(true);
+    const { data, error } = await supabase.functions.invoke("delete-tenant", { body: { tenant_id: id } });
+    if (error || (data as any)?.error) {
+      toast.error("Erro ao excluir cliente", { description: (data as any)?.error || error?.message });
+      setDeleting(false);
+      return;
+    }
+    toast.success(`"${tenant.name}" foi excluído`);
+    navigate("/clientes");
   };
 
   if (loading) {
@@ -157,6 +174,42 @@ export default function ClienteDetail() {
           )}
         </CardContent>
       </Card>
+
+      {tenant.slug !== "transdata" && (
+        <Card className="border-destructive/40">
+          <CardHeader><CardTitle className="text-base text-destructive">Zona de risco</CardTitle></CardHeader>
+          <CardContent className="space-y-3">
+            <p className="text-sm text-muted-foreground">
+              Exclui o cliente, os usuários dele, todos os projetos e dados relacionados. Não pode ser desfeito.
+            </p>
+            <Dialog open={deleteOpen} onOpenChange={(o) => { setDeleteOpen(o); if (!o) setConfirmText(""); }}>
+              <DialogTrigger asChild>
+                <Button variant="destructive" size="sm">Excluir cliente</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Excluir "{tenant.name}"?</DialogTitle>
+                  <DialogDescription>
+                    Essa ação é permanente. Todos os projetos, usuários, anexos e configurações desse
+                    cliente serão apagados. Digite <strong>{tenant.name}</strong> abaixo pra confirmar.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-3">
+                  <Input value={confirmText} onChange={(e) => setConfirmText(e.target.value)} placeholder={tenant.name} />
+                  <Button
+                    variant="destructive"
+                    className="w-full"
+                    disabled={deleting || confirmText !== tenant.name}
+                    onClick={handleDelete}
+                  >
+                    {deleting ? "Excluindo..." : "Excluir definitivamente"}
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
